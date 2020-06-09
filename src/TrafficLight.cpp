@@ -45,7 +45,7 @@ void TrafficLight::waitForGreen()
     while (true){
         TrafficLightPhase phase = _messageQueue.receive();
         if (phase == TrafficLightPhase::green){
-            return;
+            break;
         }
     }
 }
