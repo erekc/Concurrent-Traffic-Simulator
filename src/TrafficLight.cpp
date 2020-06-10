@@ -42,12 +42,22 @@ void TrafficLight::waitForGreen()
     // FP.5b : add the implementation of the method waitForGreen, in which an infinite while-loop 
     // runs and repeatedly calls the receive function on the message queue. 
     // Once it receives TrafficLightPhase::green, the method returns.
-    while (true){
-        TrafficLightPhase phase = _messageQueue.receive();
-        if (phase == TrafficLightPhase::green){
-            break;
-        }
-    }
+
+    // while (true){
+    //     TrafficLightPhase phase = _messageQueue.receive();
+    //     //std::cout << "Traffic Light #" << _id << " phase: " << phases[phase] << std::endl;
+    //     if (phase == TrafficLightPhase::green){
+    //         //long timeDifference = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start).count();
+    //         //std::cout << "Traffic Light #" << _id << " green after " << timeDifference << " milliseconds." << std::endl;
+    //         break;
+    //     }
+    // }
+
+    // std::chrono::time_point<std::chrono::system_clock> start = std::chrono::system_clock::now();
+    // std::cout << "Traffic Light #" << _id << " red and waiting for green." << std::endl;
+    while (_messageQueue.receive() == TrafficLightPhase::red){}
+    // long timeDifference = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start).count();
+    // std::cout << "Traffic Light #" << _id << " green after " << timeDifference << " milliseconds." << std::endl;
 }
 
 
@@ -72,12 +82,12 @@ void TrafficLight::cycleThroughPhases()
     // Also, the while-loop should use std::this_thread::sleep_for to wait 1ms between two cycles.
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     std::default_random_engine generator (seed);
-    std::uniform_int_distribution<long> distribution(4000,6000);
+    std::uniform_int_distribution<int> distribution(4000,6000);
 
-    long duration = distribution(generator);
+    int duration = distribution(generator);
     std::chrono::time_point<std::chrono::system_clock> start = std::chrono::system_clock::now();
     while (true){
-        long timeDifference = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start).count();
+        int timeDifference = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start).count();
         if (timeDifference > duration){
             if (_currentPhase == TrafficLightPhase::green){
                 _currentPhase = TrafficLightPhase::red;
